@@ -12,11 +12,18 @@
         <button @click="tab = 'B'">B</button>
         <button @mouseenter="tab = 'C'">C</button>
         <button @click.prevent="tab = 'D'">D</button>
-        <transition>
-            <div v-if="tab === 'A'">AAA</div>
-            <div v-else-if="tab === 'B'">BBB</div>
-            <div v-else>CCC</div>
-        </transition>
+
+        <div class="box">
+            <transition>
+                <div v-if="tab === 'A'">AAA</div>
+                <div v-else-if="tab === 'B'">BBB</div>
+                <div v-else>CCC</div>
+            </transition>
+        </div>
+
+        <div v-show="tab == 'A'" class="box">$AAA$</div>
+        <div v-show="tab == 'B'" class="box">$BBB$</div>
+        <div v-show="tab !== 'A' && tab !== 'B'">$Other$</div>
     </div>
     <script src="https://unpkg.com/vue@next"></script>
     <script>
@@ -32,17 +39,22 @@
 </html>
 <style>
     #app > div{
-        position: absolute;
-        top: 3rem;
-        left: 0;
+        width: 10rem;
+        height: 5rem;
+        font-size: 2rem;
+        margin: .25rem;
+        background-color: #ddd;
+    }
+    .box{
+        position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 10rem;
-        height: 5rem;
-        font-size: 4rem;
-        margin: .25rem;
-        background-color: #ddd;
+    }
+    .box > div{
+        position: absolute;
+        top: 3rem;
+        left: 0;
     }
     .v-enter-active,
     .v-leave-active {
