@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue3</title>
+</head>
+<body>
+    <div id="app">
+        <div>
+            <input type="text" @input="handleSearch">
+            單向綁定：{{ searchInput }}
+        </div>
+        <div>
+            <input type="text" v-model="searchInput2" >
+            雙向綁定：{{ searchInput2 }}
+        </div>
+        <div>
+            <input type="checkbox">filter</input>
+        </div>
+        <p>資料量：{{prodCount}}</p>
+        <div v-if="prodCount === 0">
+            nodata
+        </div>
+        <div class="wrap" v-else>
+            <div 
+                v-for="prod in products" 
+                :key="prod.id"
+                class="card"
+            >
+                <div v-if="prod">
+                    <p class="cardName">{{prod.title}}</p>
+                    <img :src="prod.image" :alt="prod.title">
+                    <p>$ {{prod.price}}</p>
+                    <p v-if="prod.rating">
+                        <span v-for="star in parseInt(prod.rating.rate)">
+                            🌟
+                        </span>
+                        {{prod.rating.count}}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="https://unpkg.com/vue@next"></script>
+<script>
+    Vue.createApp({
+        data(){
+            return {
+                products: [],
+                searchInput: '',
+                searchInput2: '',
+            }
+        },
+        computed: {
+            prodCount(){
+                return this.products.length
+            }
+        },
+        methods: {
+            handleSearch(e){ //單向綁定
+                // console.log(e.target.value)
+                this.searchInput = e.target.value
+            }
+        },
+        mounted() {
+            fetch('https://fakestoreapi.com/products')
+            // .then(res=>res.json())
+            .then(res=>{
+                return res.json()
+            })
+            .then(json=>{
+                this.products = json
+            })
+        }
+    }).mount("#app");
+</script>
+</body>
+</html>
+<style>
+.wrap{
+    height: 80vh;
+    overflow: scroll;
+}
+.card{
+    width: 10rem;
+    border: 1px solid #ddd;
+    margin: .5rem;
+    padding: .5rem;
+}
+img{
+    width: 100%;
+}
+</style>
