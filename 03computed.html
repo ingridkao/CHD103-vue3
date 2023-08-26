@@ -6,7 +6,23 @@
 </head>
 <body>
     <div id="app">
-        <div class="wrap">
+        <button 
+            class="btn"
+            :class="{'active': toggle}"
+            @click="updateToggle"
+        >
+            按鈕
+        </button>
+        <button 
+            :class="btnClass"
+            @click="updateToggle"
+        >
+            按鈕
+        </button>
+        <div v-if="prodCount === 0">
+            nodata
+        </div>
+        <div class="wrap" v-else>
             <div 
                 v-for="prod in products" 
                 :key="prod.id"
@@ -32,12 +48,25 @@
     Vue.createApp({
         data(){
             return {
-                products: []
+                products: [],
+                toggle: false
             }
         },
         computed: {
+            btnClass(){
+                if(this.toggle){
+                    return 'btn active'
+                }else{
+                    return 'btn'
+                }
+            },
             prodCount(){
                 return this.products.length
+            }
+        },
+        methods: {
+            updateToggle(){
+                this.toggle = !this.toggle
             }
         },
         mounted() {
@@ -67,5 +96,13 @@
 }
 img{
     width: 100%;
+}
+.btn{
+    background-color: rgb(206, 221, 221);
+    width: 10rem;
+    font-size: 2rem;
+}
+.btn.active{
+    background-color: rgb(232, 208, 166);
 }
 </style>
