@@ -14,6 +14,7 @@
             <input type="text" v-model="searchInput2" >
             雙向綁定：{{ searchInput2 }}
             <button @click="searchClick">搜尋</button>
+            <button @click="reset">reset</button>
         </div>
         <div>
             <input type="checkbox">filter</input>
@@ -57,7 +58,7 @@
         },
         computed: {
             prodCount(){
-                return this.products.length
+                return this.productDisplay.length
             }
         },
         methods: {
@@ -74,15 +75,22 @@
                 // return rate? Math.round(rate) : 0
             },
             searchClick(){
-                console.log(1);
+                // console.log(this.searchInput2);
                 const res = this.products.filter((item, index, array)=>{
-                    return item.title == this.searchInput2
+                    // return item.title == this.searchInput2
+                    // return item.title.includes(this.searchInput2)
+                    const title = item.title.toUpperCase()
+                    const searchInput2 = this.searchInput2.toUpperCase()
+                    return title.includes(searchInput2)
                 })
                 this.productDisplay = res
+            },
+            reset(){
+                this.productDisplay = this.products
             }
         },
         mounted() {
-            //最一開始
+            //最一開始初始化
             fetch('https://fakestoreapi.com/products')
             // .then(res=>res.json())
             .then(res=>{
