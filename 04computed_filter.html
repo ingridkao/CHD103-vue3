@@ -6,13 +6,14 @@
 </head>
 <body>
     <div id="app">
-        <div>
+        <!-- <div>
             <input type="text" @input="handleSearch">
             單向綁定：{{ searchInput }}
-        </div>
+        </div> -->
         <div>
             <input type="text" v-model="searchInput2" >
             雙向綁定：{{ searchInput2 }}
+            <button @click="searchClick">搜尋</button>
         </div>
         <div>
             <input type="checkbox">filter</input>
@@ -23,7 +24,7 @@
         </div>
         <div class="wrap" v-else>
             <div 
-                v-for="prod in products" 
+                v-for="prod in productDisplay" 
                 :key="prod.id"
                 class="card"
             >
@@ -49,6 +50,7 @@
         data(){
             return {
                 products: [],
+                productDisplay: [],
                 searchInput: '',
                 searchInput2: '',
             }
@@ -70,9 +72,17 @@
                     return 0
                 }
                 // return rate? Math.round(rate) : 0
+            },
+            searchClick(){
+                console.log(1);
+                const res = this.products.filter((item, index, array)=>{
+                    return item.title == this.searchInput2
+                })
+                this.productDisplay = res
             }
         },
         mounted() {
+            //最一開始
             fetch('https://fakestoreapi.com/products')
             // .then(res=>res.json())
             .then(res=>{
@@ -80,6 +90,7 @@
             })
             .then(json=>{
                 this.products = json
+                this.productDisplay = json
             })
         }
     }).mount("#app");
