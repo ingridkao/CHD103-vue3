@@ -8,31 +8,47 @@
 </head>
 <body>
     <div id="app">
-        <button v-on:click="tab = 'A'">A</button>
-        <button @click="tab = 'B'">B</button>
-        <button @mouseenter="tab = 'C'">C</button>
-        <button @click.prevent="tab = 'D'">D</button>
+        <button 
+            v-for="item in icon"
+            class="fa-brands fa-lg" 
+            :class="item">
+            {{item}}
+        </button>
+
+        <button v-on:click="clickTab('A', 1, 2)">A</button>
+        <button @click="clickTab('B')">B</button>
+        <button @mouseenter="clickTab('C')">C</button>
+        <button @click.prevent="clickTab('D')">
+            D
+        </button>
 
         <div class="box">
             <transition>
                 <div v-if="tab === 'A'">AAA</div>
                 <div v-else-if="tab === 'B'">BBB</div>
-                <div v-else>CCC</div>
+                <div v-else>{{tab}}</div>
             </transition>
         </div>
 
         <div v-show="tab == 'A'" class="box">$AAA$</div>
         <div v-show="tab == 'B'" class="box">$BBB$</div>
-        <div v-show="tab !== 'A' && tab !== 'B'">$Other$</div>
+        <div v-show="tab !== 'A' && tab !== 'B'">${{tab}}$</div>
     </div>
     <script src="https://unpkg.com/vue@next"></script>
     <script>
         const app = Vue.createApp({
             data(){
                 return {
-                    tab: 'D'
+                    tab: 'A',
+                    test: '123',
+                    icon: ['fa-instagram', 'fa-facebook']
                 }
-            }
+            },
+            methods: {
+                clickTab(activeTab, tt, dd){
+                    this.tab = activeTab
+                }
+            },
         }).mount('#app')        
     </script>
 </body>
