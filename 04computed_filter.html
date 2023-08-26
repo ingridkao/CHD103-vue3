@@ -6,13 +6,11 @@
 </head>
 <body>
     <div id="app">
-        <!-- <div>
-            <input type="text" @input="handleSearch">
-            單向綁定：{{ searchInput }}
-        </div> -->
         <div>
             <input type="text" v-model="searchInput2" >
-            雙向綁定：{{ searchInput2 }}
+            <!-- 雙向綁定：{{ searchInput2 }} -->
+            <input type="number" v-model="minPrice" min="0">
+            <!-- <input type="text" v-model.number="minPrice"> -->
             <button @click="searchClick">搜尋</button>
             <button @click="reset">reset</button>
         </div>
@@ -52,8 +50,8 @@
             return {
                 products: [],
                 productDisplay: [],
-                searchInput: '',
                 searchInput2: '',
+                minPrice: 1
             }
         },
         computed: {
@@ -62,10 +60,6 @@
             }
         },
         methods: {
-            handleSearch(e){ //單向綁定
-                // console.log(e.target.value)
-                this.searchInput = e.target.value
-            },
             ratingParseInt(rate){
                 if(rate){
                     return Math.round(rate) 
@@ -75,18 +69,24 @@
                 // return rate? Math.round(rate) : 0
             },
             searchClick(){
-                // console.log(this.searchInput2);
                 const res = this.products.filter((item, index, array)=>{
-                    // return item.title == this.searchInput2
-                    // return item.title.includes(this.searchInput2)
+                    let answer = false
+                    // 字串搜尋
                     const title = item.title.toUpperCase()
                     const searchInput2 = this.searchInput2.toUpperCase()
-                    return title.includes(searchInput2)
+                    answer = title.includes(searchInput2)
+
+                    // 價格篩選:僅顯示大於minPrice的商品
+                    if(answer){
+                        answer = item.price >= this.minPrice
+                    }
+                    return answer
                 })
                 this.productDisplay = res
             },
             reset(){
                 this.productDisplay = this.products
+                this.searchInput2 = ''
             }
         },
         mounted() {
