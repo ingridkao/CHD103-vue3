@@ -32,36 +32,57 @@ const app = Vue.createApp({
         return {
         products: [
             {
-            title: "iKON 官方手燈",
-            price: 1200,
-            inCart: 1,
+                title: "iKON 官方手燈",
+                price: 1200,
+                inCart: 1,
             },
             {
-            title: "MAMAMOO 官方手燈",
-            price: 1400,
-            inCart: 1,
+                title: "MAMAMOO 官方手燈",
+                price: 1400,
+                inCart: 1,
             },
             {
-            title: "SHINEE 官方手燈",
-            price: 1400,
-            inCart: 1,
+                title: "SHINEE 官方手燈",
+                price: 1400,
+                inCart: 1,
             },
             {
-            title: "SUPER JUNIOR 官方手燈",
-            price: 1350,
-            inCart: 1,
+                title: "SUPER JUNIOR 官方手燈",
+                price: 1350,
+                inCart: 1,
             }
         ]
         }
     },
     computed: {
         calculateTotalPrice() {
-            return this.products.reduce((total, item) => total + item.price * item.inCart, 0);
+            return this.products.reduce((total, item) => {
+                return total + item.price * item.inCart
+            }, 0);
+        },
+        newProducts(){
+            return [...this.products]
         }
     },
     watch: {
-        products(newVue){
-            console.log(newVue);
+        // 如果想要偵測array｜object數量上的更動（監聽第一層）
+        newProducts(newVue){
+            console.log(newVue.length);
+            console.log('沒有deep');
+            // console.log(newVue);
+        },
+        /*  如果想要偵測array｜object裡面的更動（監聽第二層以後）
+            '想偵測的東西': {
+                handler: function(newVal, oldVal){},
+                deep: true
+            }
+        */
+        'products': {
+            handler: function(newVal, oldVal){
+                console.log('有deep');
+                // console.log(newVal);
+            },
+            deep: true
         }
     },
     methods: {

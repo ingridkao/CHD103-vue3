@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<div id="app">
+    mobile: {{ mobile }}
+</div>
+<script src="https://unpkg.com/vue@next"></script>
+<script>
+    let resizeEvent = null
+    const app = Vue.createApp({
+        data() {
+            return {
+                mobile: 0
+            }
+        },
+        created() {
+            //一開始先抓寬度
+            this.setWidth(window.innerWidth)
+                // 定義事件：為了之後可以使用vue methods
+            resizeEvent = (e) => this.setWidth(e.target.innerWidth)
+                // 事件聆聽註冊
+            window.addEventListener("resize", resizeEvent)
+        },
+        unmounted() {
+                // 事件聆聽註銷
+            window.removeEventListener("resize", resizeEvent)
+        },
+        methods:{
+            setWidth(width){
+                // console.log(width)// 換頁就可以知道unmounted有沒有效
+                // this.mobile = (width <= 768)
+                this.mobile = width
+            }
+        }
+    }).mount('#app')
+</script>
+</body>
+</html>
