@@ -49,19 +49,19 @@
             }
         },
         watch: { // ->無腦監聽
+            // 監聽data的productDisplay
+            productDisplay(newCount, oldCount){
+                if(newCount.length === 0){
+                    alert('沒東西了1')
+                }
+            },
             // 監聽computed的prodCount
             prodCount(newCount, oldCount){
                 console.log(newCount);
                 if(newCount === 0){
-                    alert('沒東西了1')
-                }
-            },
-            // 監聽data的productDisplay
-            productDisplay(newCount, oldCount){
-                if(newCount.length === 0){
                     alert('沒東西了2')
                 }
-            }
+            },
         },
         computed: { // ->有腦監聽
             // 不要用來調用methods裡的function
