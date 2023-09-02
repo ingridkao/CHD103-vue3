@@ -2,20 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Vue3</title>
+    <title>watch</title>
 </head>
 <body>
     <div id="app">
         <div >
             <input type="text" v-model="searchInput2" >
-            <!-- 雙向綁定：{{ searchInput2 }} -->
-            <input type="number" v-model="minPrice" min="0" @input="handleInput">
-            <!-- <input type="text" v-model.number="minPrice"> -->
             <button @click="searchClick">搜尋</button>
-            <button @click="reset" @mousedown.left="handleMouse">reset</button>
-        </div>
-        <div>
-            <input type="checkbox">filter</input>
+            <button @click="reset">reset</button>
         </div>
         <p>資料量：{{prodCount}}</p>
         <div v-if="prodCount === 0">
@@ -66,19 +60,13 @@
                 }else{
                     return 0
                 }
-                // return rate? Math.round(rate) : 0
             },
             searchClick(){
-                console.log(this.prodCount)
-                this.enterText('ingird', 123)
                 const res = this.products.filter((item, index, array)=>{
                     let answer = false
-                    // 字串搜尋
                     const title = item.title.toUpperCase()
                     const searchInput2 = this.searchInput2.toUpperCase()
                     answer = title.includes(searchInput2)
-
-                    // 價格篩選:僅顯示大於minPrice的商品
                     if(answer){
                         answer = item.price >= this.minPrice
                     }
@@ -89,24 +77,11 @@
             reset(){
                 this.productDisplay = this.products
                 this.searchInput2 = ''
-            },
-            handleInput(e){
-                console.log(e);
-            },
-            handleMouse(e){
-                console.log(e);
-            },
-            enterText(text, num){
-                console.log(`${text}---${num}`);
             }
         },
         mounted() {
-            //最一開始初始化
             fetch('https://fakestoreapi.com/products')
-            // .then(res=>res.json())
-            .then(res=>{
-                return res.json()
-            })
+            .then(res=>res.json())
             .then(json=>{
                 this.products = json
                 this.productDisplay = json
@@ -136,7 +111,6 @@
     text-align: center;
 }
 img{
-    /* width: 80%; */
     height: 5rem;
 }
 </style>
