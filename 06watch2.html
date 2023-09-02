@@ -25,56 +25,59 @@
     </div>
   </div>
 
-  <script src="https://unpkg.com/vue@next"></script>
-  <script>
-    const app = Vue.createApp({
-      data() {
+<script src="https://unpkg.com/vue@next"></script>
+<script>
+const app = Vue.createApp({
+    data() {
         return {
-          products: [
+        products: [
             {
-              title: "iKON 官方手燈",
-              price: 1200,
-              inCart: 1,
+            title: "iKON 官方手燈",
+            price: 1200,
+            inCart: 1,
             },
             {
-              title: "MAMAMOO 官方手燈",
-              price: 1400,
-              inCart: 1,
+            title: "MAMAMOO 官方手燈",
+            price: 1400,
+            inCart: 1,
             },
             {
-              title: "SHINEE 官方手燈",
-              price: 1400,
-              inCart: 1,
+            title: "SHINEE 官方手燈",
+            price: 1400,
+            inCart: 1,
             },
             {
-              title: "SUPER JUNIOR 官方手燈",
-              price: 1350,
-              inCart: 1,
+            title: "SUPER JUNIOR 官方手燈",
+            price: 1350,
+            inCart: 1,
             }
-          ]
+        ]
         }
-      },
-      computed: {
+    },
+    computed: {
         calculateTotalPrice() {
-          return this.products.reduce((total, item) => total + item.price * item.inCart, 0);
+            return this.products.reduce((total, item) => total + item.price * item.inCart, 0);
         }
-      },
-      methods: {
+    },
+    watch: {
+        products(newVue){
+            console.log(newVue);
+        }
+    },
+    methods: {
         autoDelete(item,index){
-          if(item.inCart <= 0){
-            this.products.splice(index, 1);
-          }
+            if(item.inCart > 0)return
+            this.products.splice(index, 1)
         },
         deleteProduct(index) {
-          this.products.splice(index, 1);
+            this.products.splice(index, 1)
         },
         reset() {
-          //清空購物車
-          this.products = [];
+            this.products = []
         }
-      }
+    }
     }).mount('#app')
-  </script>
+</script>
 </body>
 
 </html>
