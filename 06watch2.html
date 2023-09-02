@@ -1,133 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>watch</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>購物車</title>
 </head>
+
 <body>
-    <div id="app">
-        <div >
-            <input type="text" v-model="searchInput2" >
-            <button @click="searchClick">搜尋</button>
-            <button @click="reset">reset</button>
+  <div id="app">
+    <div class="wrap">
+      <div class="inner">
+        <div v-for="(item,index) in products" :key="index" class="card">
+          <div v-if="item">
+            <p class="cardName">{{item.title}}</p>
+            <p>${{item.price}}</p>
+            <input type="number" v-model="item.inCart" @input="autoDelete(item,index)" min="0">
+            <button class="deleteProd" @click="deleteProduct(index)">刪除商品</button>
+          </div>
         </div>
-        <p>資料量：{{prodCount}}</p>
-        <div v-if="prodCount === 0">
-            nodata
-        </div>
-        <div class="wrap" v-else>
-            <div 
-                v-for="prod in productDisplay" 
-                :key="prod.id"
-                class="card"
-            >
-                <div v-if="prod">
-                    <p>{{prod.title}}</p>
-                    <div class="cardImg">
-                        <img :src="prod.image" :alt="prod.title">
-                    </div>
-                    <p>$ {{prod.price}}</p>
-                    <p v-if="prod.rating">
-                        <span v-for="star in ratingParseInt(prod.rating.rate)">
-                            🌟
-                        </span>
-                        {{prod.rating.count}}
-                    </p>
-                </div>
-            </div>
-        </div>
+      </div>
+      <p class="allprice">總金額：{{calculateTotalPrice}}</p>
+      <button class="deleteAll" @click="reset">清除購物車</button>
     </div>
-<script src="https://unpkg.com/vue@next"></script>
-<script>
-    Vue.createApp({
-        data(){
-            return {
-                products: [],
-                productDisplay: [],
-                searchInput2: '',
-                minPrice: 1
+  </div>
+
+  <script src="https://unpkg.com/vue@next"></script>
+  <script>
+    const app = Vue.createApp({
+      data() {
+        return {
+          products: [
+            {
+              title: "iKON 官方手燈",
+              price: 1200,
+              inCart: 1,
+            },
+            {
+              title: "MAMAMOO 官方手燈",
+              price: 1400,
+              inCart: 1,
+            },
+            {
+              title: "SHINEE 官方手燈",
+              price: 1400,
+              inCart: 1,
+            },
+            {
+              title: "SUPER JUNIOR 官方手燈",
+              price: 1350,
+              inCart: 1,
             }
-        },
-        watch: { // ->無腦監聽
-            // 監聽data的productDisplay
-            productDisplay(newCount, oldCount){
-                if(newCount.length === 0){
-                    alert('沒東西了1')
-                }
-            },
-            // 監聽computed的prodCount
-            prodCount(newCount, oldCount){
-                console.log(newCount);
-                if(newCount === 0){
-                    alert('沒東西了2')
-                }
-            },
-        },
-        computed: { // ->有腦監聽
-            // 不要用來調用methods裡的function
-            // 或調用非同步事件(計時器, fetch)
-            prodCount(){
-                return this.productDisplay.length
-            }
-        },
-        methods: {
-            ratingParseInt(rate){
-                if(rate){
-                    return Math.round(rate) 
-                }else{
-                    return 0
-                }
-            },
-            searchClick(){
-                const res = this.products.filter((item, index, array)=>{
-                    let answer = false
-                    const title = item.title.toUpperCase()
-                    const searchInput2 = this.searchInput2.toUpperCase()
-                    answer = title.includes(searchInput2)
-                    if(answer){
-                        answer = item.price >= this.minPrice
-                    }
-                    return answer
-                })
-                this.productDisplay = res
-            },
-            reset(){
-                this.productDisplay = this.products
-                this.searchInput2 = ''
-            }
-        },
-        mounted() {
-            fetch('https://fakestoreapi.com/products')
-            .then(res=>res.json())
-            .then(json=>{
-                this.products = json
-                this.productDisplay = json
-            })
+          ]
         }
-    }).mount("#app");
-</script>
+      },
+      computed: {
+        calculateTotalPrice() {
+          return this.products.reduce((total, item) => total + item.price * item.inCart, 0);
+        }
+      },
+      methods: {
+        autoDelete(item,index){
+          if(item.inCart <= 0){
+            this.products.splice(index, 1);
+          }
+        },
+        deleteProduct(index) {
+          this.products.splice(index, 1);
+        },
+        reset() {
+          //清空購物車
+          this.products = [];
+        }
+      }
+    }).mount('#app')
+  </script>
 </body>
+
 </html>
-<style>
-.wrap{
-    width: 100%;
-    height: 80vh;
-    overflow: scroll;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    gap: .25rem;
-}
-.card{
-    box-sizing: border-box;
-    flex-basis: 49%;
-    border: 1px solid #ddd;
-    padding: .25rem;
-}
-.cardImg{
-    text-align: center;
-}
-img{
-    height: 5rem;
-}
-</style>
