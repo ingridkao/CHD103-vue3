@@ -9,10 +9,13 @@
 <body>
 <div id="app">
     mobile: {{ mobile }}
+    <div id="test"></div>
 </div>
 <script src="https://unpkg.com/vue@next"></script>
 <script>
+    // 如果有用addEventListener
     let resizeEvent = null
+
     const app = Vue.createApp({
         data() {
             return {
@@ -20,15 +23,30 @@
             }
         },
         created() {
+            console.log('created');
+            console.log(document.getElementById("test"));
+            console.log(this.mobile);
+
             //一開始先抓寬度
             this.setWidth(window.innerWidth)
-                // 定義事件：為了之後可以使用vue methods
-            resizeEvent = (e) => this.setWidth(e.target.innerWidth)
-                // 事件聆聽註冊
+            // 定義事件：為了之後可以使用vue methods
+            resizeEvent = (e) => {
+                this.setWidth(e.target.innerWidth)
+            }
+            // 事件聆聽註冊
             window.addEventListener("resize", resizeEvent)
+
+        },
+        mounted() {
+            // DOM物件被掛載在瀏覽器中才被執行
+            console.log('mounted');
+            console.log(this.mobile);
+            console.log(document.getElementById("test"));
+
         },
         unmounted() {
-                // 事件聆聽註銷
+            console.log('unmounted');
+            // 事件聆聽註銷
             window.removeEventListener("resize", resizeEvent)
         },
         methods:{
